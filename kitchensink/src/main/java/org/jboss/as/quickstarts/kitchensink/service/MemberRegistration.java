@@ -45,7 +45,7 @@ public class MemberRegistration {
 
     public void register(Member member) throws Exception {
     	// Check whether user is already in database
-    	Optional<Member> existingMember = memberRepository.findByNameOrEmail(member.getName(), member.getEmail());
+    	Optional<Member> existingMember = memberRepository.findByNameOrEmail(member.getFirstName(), member.getLastName(), member.getEmail());
     	if (existingMember.isPresent()) {
     		throw new RuntimeException(String.format("User with email '%s' or name '%s' already registered", existingMember.get().getEmail(), existingMember.get().getName()));
     	} else {    		

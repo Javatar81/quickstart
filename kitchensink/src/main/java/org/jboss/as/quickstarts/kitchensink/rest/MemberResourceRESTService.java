@@ -68,7 +68,7 @@ public class MemberResourceRESTService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Member> listAllMembers() {
-        return repository.findAllOrderedByName();
+        return repository.findAllOrderedByLastName();
     }
 
     @GET
