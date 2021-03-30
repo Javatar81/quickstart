@@ -31,6 +31,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -42,6 +43,7 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.as.quickstarts.kitchensink.data.MemberRepository;
 import org.jboss.as.quickstarts.kitchensink.model.Member;
+import org.jboss.as.quickstarts.kitchensink.service.MemberDeletion;
 import org.jboss.as.quickstarts.kitchensink.service.MemberRegistration;
 
 /**
@@ -64,6 +66,9 @@ public class MemberResourceRESTService {
 
     @Inject
     MemberRegistration registration;
+    
+    @Inject
+    MemberDeletion deletion;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -117,6 +122,17 @@ public class MemberResourceRESTService {
         }
 
         return builder.build();
+    }
+    
+    @DELETE
+    @Path("/{id:[0-9][0-9]*}")
+    public void deleteMemberById(@PathParam("id") long id) throws Exception {
+        Member member = repository.findById(id);
+        if (member == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } else {
+        	deletion.delete(id);
+        }
     }
 
     /**
