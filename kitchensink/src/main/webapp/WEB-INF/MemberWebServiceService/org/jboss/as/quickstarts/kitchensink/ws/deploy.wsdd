@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Use this file to deploy some handlers/chains and services      --><!-- Two ways to do this:                                           --><!--   java org.apache.axis.client.AdminClient deploy.wsdd          --><!--      after the axis server is running                          --><!-- or                                                             --><!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   --><!--      from the same directory that the Axis engine runs         --><deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from MemberWebServiceService WSDL service -->
+
+  <service name="MemberWebService" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://ws.kitchensink.quickstarts.as.jboss.org"/>
+      <parameter name="wsdlServiceElement" value="MemberWebServiceService"/>
+      <parameter name="schemaQualified" value="http://ws.kitchensink.quickstarts.as.jboss.org,http://model.kitchensink.quickstarts.as.jboss.org"/>
+      <parameter name="wsdlServicePort" value="MemberWebService"/>
+      <parameter name="className" value="org.jboss.as.quickstarts.kitchensink.ws.MemberWebService"/>
+      <parameter name="wsdlPortType" value="MemberWebService"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://ws.kitchensink.quickstarts.as.jboss.org" name="createMember" qname="operNS:createMember" soapAction="">
+        <parameter xmlns:pns="http://ws.kitchensink.quickstarts.as.jboss.org" xmlns:tns="http://model.kitchensink.quickstarts.as.jboss.org" qname="pns:member" type="tns:Member"/>
+      </operation>
+      <parameter name="allowedMethods" value="createMember"/>
+
+      <typeMapping xmlns:ns="http://model.kitchensink.quickstarts.as.jboss.org" qname="ns:Member" type="java:org.jboss.as.quickstarts.kitchensink.model.Member" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+  </service>
+</deployment>
