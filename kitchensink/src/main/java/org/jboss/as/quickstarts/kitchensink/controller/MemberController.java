@@ -24,6 +24,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.jboss.as.quickstarts.kitchensink.mdb.MemberPublisher;
 import org.jboss.as.quickstarts.kitchensink.model.Member;
 import org.jboss.as.quickstarts.kitchensink.service.MemberDeletion;
 import org.jboss.as.quickstarts.kitchensink.service.MemberRegistration;
@@ -43,10 +44,15 @@ public class MemberController {
     
     @Inject
     private MemberDeletion memberDeletion;
+    
+    @Inject
+    private MemberPublisher memberPublisher;
 
     @Produces
     @Named
     private Member newMember;
+    
+    private boolean messaging = true;
 
     @PostConstruct
     public void initNewMember() {
@@ -55,7 +61,11 @@ public class MemberController {
 
     public void register() throws Exception {
         try {
-            memberRegistration.register(newMember);
+        	if (!messaging) {
+        		memberRegistration.register(newMember);
+        	} else {
+        		memberPublisher.publish(newMember);
+        	}
             FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration successful");
             facesContext.addMessage(null, m);
             initNewMember();
